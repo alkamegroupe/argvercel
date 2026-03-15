@@ -1,9 +1,0 @@
-249579,160.178.195.115 - MA,2025-03-20 02:35:06,DEVICE: Computer</br>SYSTEM: Mac OS X</br>BROWSER: Chrome,https://altairfinance.es/.06532/control-panel/panel.php?id_user=160.178.195.115,160-178-195-115.json,160.178.195.115
-820613,160.178.195.115 - MA,2025-03-20 02:37:41,DEVICE: Computer</br>SYSTEM: Mac OS X</br>BROWSER: Chrome,https://altairfinance.es/.06532/arg/control-panel/panel.php?id_user=160.178.195.115,160-178-195-115.json,160.178.195.115
-922074,127.0.0.1 - ,2025-05-09 16:45:58,DEVICE: Computer</br>SYSTEM: Windows 10</br>BROWSER: Chrome,https://127.0.0.1/arg/control-panel/panel.php?id_user=127.0.0.1,127-0-0-1.json,127.0.0.1
-948627,127.0.0.1 - ,2025-05-09 16:58:49,DEVICE: Computer</br>SYSTEM: Windows 10</br>BROWSER: Chrome,https://127.0.0.1/arg/control-panel/panel.php?id_user=127.0.0.1,127-0-0-1.json,127.0.0.1
-38937,127.0.0.1 - ,2025-05-09 16:58:55,DEVICE: Computer</br>SYSTEM: Windows 10</br>BROWSER: Chrome,https://127.0.0.1/arg/control-panel/panel.php?id_user=127.0.0.1,127-0-0-1.json,127.0.0.1
-547685,127.0.0.1 - ,2025-05-09 17:01:43,DEVICE: Computer</br>SYSTEM: Windows 10</br>BROWSER: Chrome,https://127.0.0.1/arg/control-panel/panel.php?id_user=127.0.0.1,127-0-0-1.json,127.0.0.1
-866353,127.0.0.1 - ,2025-05-09 17:02:11,DEVICE: Computer</br>SYSTEM: Windows 10</br>BROWSER: Chrome,https://127.0.0.1/arg/control-panel/panel.php?id_user=127.0.0.1,127-0-0-1.json,127.0.0.1
-247217,127.0.0.1 - ,2025-05-10 13:22:28,DEVICE: Computer</br>SYSTEM: Windows 10</br>BROWSER: Chrome,https://127.0.0.1/arg/control-panel/panel.php?id_user=127.0.0.1,127-0-0-1.json,127.0.0.1
-754777,127.0.0.1 - ,2025-05-10 13:23:26,DEVICE: Computer</br>SYSTEM: Windows 10</br>BROWSER: Chrome,https://127.0.0.1/arg/control-panel/panel.php?id_user=127.0.0.1,127-0-0-1.json,127.0.0.1
