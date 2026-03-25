@@ -18,21 +18,21 @@ function isPrivateIp($ip) {
     return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false;
 }
 
-if (isPrivateIp($IpLockUp) || $IpLockUp === '127.0.0.1' || $IpLockUp === '::1') {
+if (isPrivateIp($IpLockUp) || $IpLockUp === '127.0.0.1' || $IpLockUp === '::1' || strpos($IpLockUp, '172.17.') === 0) {
     $LOOKUP_MINCODE = 'be';
 } else {
-    $IP_LOOKUP = @json_decode(file_get_contents("https://pro.ip-api.com/json/".$IpLockUp."?key=UO8wl6MQD2zPxmf&"));
+    $IP_LOOKUP = @json_decode(@file_get_contents("https://pro.ip-api.com/json/".$IpLockUp."?key=UO8wl6MQD2zPxmf&"));
     $LOOKUP_COUNTRY  = $IP_LOOKUP->country ?? '';
     $LOOKUP_MINCODE  = $IP_LOOKUP->countryCode ?? '';
     $LOOKUP_CITY     = $IP_LOOKUP->city ?? '';
     $LOOKUP_REGION   = $IP_LOOKUP->region ?? '';
     $LOOKUP_STATE    = $IP_LOOKUP->regionName ?? '';
     $LOOKUP_ZIPCODE  = $IP_LOOKUP->zip ?? '';
-    $LOOKUP_LOWCODE  = strtolower($LOOKUP_MINCODE);
+    $LOOKUP_LOWCODE  = strtolower($LOOKUP_MINCODE ?? '');
 }
 
 
-$AuthCountry = array('be', 'ma');
+$AuthCountry = array('be', 'ma', 'nl', 'de', 'fr', 'es', 'it', 'gb', 'at', 'ch', 'lu');
 
 
 if(!in_array(strtolower($LOOKUP_MINCODE ?? ''),$AuthCountry)){
