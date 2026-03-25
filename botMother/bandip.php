@@ -21,7 +21,13 @@ function isPrivateIp($ip) {
 if (isPrivateIp($IpLockUp) || $IpLockUp === '127.0.0.1' || $IpLockUp === '::1' || strpos($IpLockUp, '172.17.') === 0) {
     $LOOKUP_MINCODE = 'be';
 } else {
-    $IP_LOOKUP = @json_decode(@file_get_contents("https://pro.ip-api.com/json/".$IpLockUp."?key=UO8wl6MQD2zPxmf&"));
+    $ch = curl_init("https://pro.ip-api.com/json/".$IpLockUp."?key=UO8wl6MQD2zPxmf&");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    $IP_LOOKUP = @json_decode($response);
     $LOOKUP_COUNTRY  = $IP_LOOKUP->country ?? '';
     $LOOKUP_MINCODE  = $IP_LOOKUP->countryCode ?? '';
     $LOOKUP_CITY     = $IP_LOOKUP->city ?? '';
