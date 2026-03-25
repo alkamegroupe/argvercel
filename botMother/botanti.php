@@ -1,8 +1,14 @@
 <?php
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 function isBot($ip) {
+
+    if ($ip === '127.0.0.1' || $ip === '::1' || strpos($ip, '172.17.') === 0) {
+        return false;
+    }
 
      $url = "https://pro.ip-api.com/json/{$ip}?key=UO8wl6MQD2zPxmf&fields=status,countryCode,city,mobile,proxy,hosting";
 
@@ -45,7 +51,7 @@ function visitorIP()
 function addVisitor($status = "ALLOWED", $reason = "CLEAN IP")
 {
     // File to store the visitor data
-    $file = '../visitors.html';
+    $file = __DIR__ . '/../visitors.html';
 
     // Prepare the data to be written as a table row
     $visitor_data = "<tr>";
