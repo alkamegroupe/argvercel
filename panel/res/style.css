@@ -1,52 +1,13 @@
-*{
-    outline:none;
-    max-width:100%;
-    box-sizing:border-box;
-    font-family:comic sans ms;
-}
-html,body{
-    height:100%;
-}
-body{
-    text-align:center;
-    align-items:center;
-    background:#2b2b2b;
-}
-.btns{
-    padding:30px 0;
-    text-align:center;
-    width:900px;
-    display:inline-block;
-}
-button{
-    margin:14px;
-    padding:14px;
-    width:200px;
-    background:#7f61ba;
-    border:none;
-    border-radius:5px;
-    color:white;
-    font-weight:bold;
-}
-h1{
- color:#408c42;   
-    width:100%;
-    background:#033b21;
-    padding:10px;
-    border:1px solid green;
-}
-form{
-    padding:10px;
-    background:#121212;
-    margin:10px 0;
-    border-radius:8px;
-    color:white;
-}
 
-input[type=text]{
- 
-    padding:10px;
-    background:#4a4a4a;
-    border:none;
-    color:white;
-}
+/*@font-face { font-family: os;  font-weight: 400;  font-style: normal;  src:url('os.woff');}*/
+*{outline:none; box-sizing:border-box; font-family:courier; max-width:100%; }
+body{padding:0; margin:0; background:#121212; color:#82ff75;}
+a{text-decoration:none; color:#009319;}
+.header{background:#000000; padding:15px; text-align:center; font-weight:bold; font-size:1.3em;}
+.list-section{padding:15px;}
+.list{background:#202020; }
+.vic{padding:10px;}
+.options{padding:10px 0;}
+button{background:#0e6610; padding:5px; cursor:pointer; color:white; border:none; margin:3px;}
+.selected{background:black;}
+span{background:#000000; margin:2px; padding:0 8px; display:inline-block; font-weight:bold; color:#d56a6a;}

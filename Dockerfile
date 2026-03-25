@@ -11,14 +11,5 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/html/
-RUN mkdir -p /var/www/html/panel/graveyard/status \
-             /var/www/html/panel/graveyard/data \
-             /var/www/html/panel/graveyard/inst \
-             /var/www/html/clients \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 777 /var/www/html/clients \
-    && chmod -R 777 /var/www/html/panel/graveyard \
-    && chmod 777 /var/www/html/log.txt \
-    && chmod 777 /var/www/html/bots_log.txt
 
 EXPOSE 80
