@@ -1,0 +1,112 @@
+/* Start Global Rules */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Open Sans", sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* font-family: "Roboto Slab", serif; */
+
+body {
+    background-color: #f7f7f7;
+}
+
+.animation-arrow {
+    transform: rotate(0deg) !important;
+}
+
+.s-m-e {
+    cursor: pointer;
+}
+
+.show-error-message {
+    display: flex !important;
+}
+
+.error-input {
+    background-color: #fdedf0 !important;
+    border-color: #e9496a !important;
+}
+
+.error-input:focus {
+    background-color: #fdedf0 !important;
+    border-color: #e9496a !important;
+}
+
+.message-error-pages {
+    margin-bottom: 10px;
+    background-color: rgba(233, 73, 106, .102);
+    color: #a3334a;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.2;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+}
+
+.message-error-pages img {
+    width: 16px;
+    margin-right: 10px;
+}
+
+
+/* End Global Rules */
+
+.loader-app {
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 0px auto;
+}
+
+.loader-app .loader-app-element {
+    animation-iteration-count: infinite;
+    animation-name: up-down;
+    animation-duration: 1s; /* Duration of each animation */
+    background-color: #00a160;
+    border-radius: 50%;
+    opacity: .5;
+    transform: scale(.5);
+    width: 15px;
+    height: 15px;
+    margin-left: 6px;
+   
+}
+
+/* Apply staggered delay to each loader element */
+.loader-app .loader-app-element:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.loader-app .loader-app-element:nth-child(2) {
+    animation-delay: 0.2s; /* Delay 0.2 seconds for the second element */
+}
+
+.loader-app .loader-app-element:nth-child(3) {
+    animation-delay: 0.4s; /* Delay 0.4 seconds for the third element */
+}
+
+.loader-app .loader-app-element:nth-child(4) {
+    animation-delay: 0.6s; /* Delay 0.4 seconds for the third element */
+}
+
+@keyframes up-down {
+    0%, 40%, 100% {  /* Combine 40% and 100% */
+        opacity: .5;
+        transform: scale(.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

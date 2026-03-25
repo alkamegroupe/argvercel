@@ -2,7 +2,8 @@
     error_reporting(0);
     
     echo "<script>
-        window.location = './pages/main_panel.php';
+        window.location = './panel.php';
     </script>";
+
 
 ?>
