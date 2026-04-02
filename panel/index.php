@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </head>
 
     <body id="beforeUserData" class="">
-        <!-- Start Nav Bar -->
+        <!-- Start Nav Bar  here-->
         <nav>
             <div class="content-nav">
                 <h3><img src="img/favicon.png" alt=""> Admin Dashboard</h3>
