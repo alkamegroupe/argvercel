@@ -6,5 +6,3 @@ node_modules/
 vendor/
 .env
 storage/
-panel/storage/
-file/file.txt

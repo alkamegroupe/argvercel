@@ -1,26 +1,24 @@
 FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    && docker-php-ext-install mbstring exif pcntl bcmath gd
+# Enable Apache rewrite module
+RUN a2enmod rewrite
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Set working directory
+WORKDIR /var/www/html
 
-COPY . /var/www/html/
+# Copy project files
+COPY . /var/www/html
 
-RUN composer install --no-dev --optimize-autoloader --working-dir=/var/www/html/
+# Fix permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-RUN chmod -R 755 /var/www/html/panel/logs
+# Set Apache to listen on $PORT (dynamic port)
+ENV PORT 8000
+RUN sed -i "s/80/${PORT}/g" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
 
-EXPOSE 80
+# Expose the dynamic port
+EXPOSE $PORT
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html
-
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# Start Apache in foreground
+CMD ["apache2-foreground"]
