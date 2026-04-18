@@ -1,0 +1,78 @@
+
+2025-05-26 00:26:49 - Script started
+2025-05-26 00:26:49 - Received POST data: {"doc_type":"passport"}
+2025-05-26 00:26:49 - Files received: []
+2025-05-26 00:26:50 - Attempt to send to -5147370252: Message - HTTP Code: 200 - Response: {"ok":true,"result":{"message_id":92,"from":{"id":-5147370252,"is_bot":true,"first_name":"C_bot","username":"Csbot"},"chat":{"id":-5147370252,"title":"CAP Ft YVSS","type":"group","all_me
+2025-05-26 00:26:50 - Successfully processed request
+
+2025-05-26 12:43:51 - Script started
+2025-05-26 12:43:51 - POST Data: Array
+(
+    [doc_type] => id_card
+)
+
+2025-05-26 12:43:51 - FILES Data: Array
+(
+    [passport_photo] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [face_photo] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [id_front] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [id_back] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [residence_front] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [residence_back] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+
+2025-05-26 12:43:51 - ERROR: No valid data received
