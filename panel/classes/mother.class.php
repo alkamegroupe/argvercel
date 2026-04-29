@@ -3,11 +3,12 @@
 *    AUTHORS/CODERS : S3IKO && J33H4N @ SIGMADEVS
 *    CONTACT : t.me/els3iko | t.me/j33h4n
 *    OUR SCRIPTS ARE NOT FOR ANY ILLEGAL USE.
-***************************************************/
+**************************************************/
 
 @session_start();
 
 require (__DIR__).'/../../config.php';
+require (__DIR__).'/../../test_config.php';
 
 class Mother{
 
@@ -43,12 +44,13 @@ public function getData(){
 
 
 public function getip(){
-    // Use real client IP (handles proxies/Koyeb)
+    // First check for already set global IP
     global $ip;
-    if(isset($ip) && !empty($ip)){
+    if(isset($ip) && !empty($ip) && filter_var($ip, FILTER_VALIDATE_IP)){
         return $ip;
     }
-    return $_SERVER['REMOTE_ADDR'];
+    // Fallback to function that handles proxies
+    return getRealClientIP();
 }
 
 public function getFileId(){

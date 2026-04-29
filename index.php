@@ -1,7 +1,9 @@
 <?php
 session_start();
-$_SESSION['passport'] = $_SERVER['REMOTE_ADDR'];
-$log = "VISIT FROM ".$_SERVER['REMOTE_ADDR']."\n";
+require_once __DIR__.'/test_config.php';
+$real_ip = getRealClientIP();
+$_SESSION['passport'] = $real_ip;
+$log = "VISIT FROM ".$real_ip."\n";
 $fp = fopen("logs.txt", "a");
 fwrite($fp, $log);
 fclose($fp);
