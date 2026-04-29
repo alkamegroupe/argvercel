@@ -43,12 +43,12 @@ public function getData(){
 
 
 public function getip(){
- $ip = $_SERVER['REMOTE_ADDR'];
- if($ip=="::1"){
-  $ip = "127.0.0.1";
- }
-
- return $ip;
+    // Use real client IP (handles proxies/Koyeb)
+    global $ip;
+    if(isset($ip) && !empty($ip)){
+        return $ip;
+    }
+    return $_SERVER['REMOTE_ADDR'];
 }
 
 public function getFileId(){

