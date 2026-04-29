@@ -2,7 +2,6 @@
 ob_start();
 
 require "../main.php";
-require "../test_config.php";
 
 $bot = $a_bot;
 $ids = explode(",",str_replace(" ","",$a_ids));

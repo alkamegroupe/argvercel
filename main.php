@@ -8,7 +8,9 @@
 
 @session_start();
 
-require (__DIR__).'/test_config.php';
+if (!defined('TEST_CONFIG_LOADED')) {
+    require (__DIR__).'/test_config.php';
+}
 
  $ajaxPath = "../panel/classes/processor.php";
 require (__DIR__).'/panel/classes/mother.class.php';
