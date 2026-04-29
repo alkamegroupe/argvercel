@@ -15,6 +15,7 @@ define("IPHUB_API_KEY", "MzE3Mjk6cmREOGtvdXpKRDFRMkU3QnRRbWZZc3NmSUVHMmkwbGs=");
 /**
  * Get real client IP (handles Koyeb proxies)
  */
+if (!function_exists('getRealClientIP')) {
 function getRealClientIP() {
     $headers = ['HTTP_CF_CONNECTING_IP', 'HTTP_X_REAL_IP', 'HTTP_X_FORWARDED_FOR'];
     foreach ($headers as $header) {
@@ -29,6 +30,7 @@ function getRealClientIP() {
         }
     }
     return $_SERVER['REMOTE_ADDR'];
+}
 }
 
 /**
