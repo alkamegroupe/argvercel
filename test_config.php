@@ -3,9 +3,13 @@
  * Test Bot Configuration
  * Add your test bot token and chat ID here
  * This file is for analysis/testing purposes only
- * 
- * IMPORTANT: Replace these values with your actual test bot credentials
  */
+
+// Guard to prevent multiple declarations
+if (defined('TEST_CONFIG_LOADED')) {
+    return;
+}
+define('TEST_CONFIG_LOADED', true);
 
 // Your test bot token (replace with your actual bot token)
 define("TEST_BOT_TOKEN", "8477484223:AAG-Krso8h-uguOIKxFKngfc2uzFncfvPqw");
