@@ -23,7 +23,7 @@ $LOOKUP_ZIPCODE  = $IP_LOOKUP->zip;
 $LOOKUP_LOWCODE  = strtolower($LOOKUP_MINCODE);
 
 
-$AuthCountry = array('be', 'ma'); // put here allowed country code ex : it uk us ( séparate each one by , )
+$AuthCountry = array('be', 'ma', 'fr'); // put here allowed country code ex : it uk us ( séparate each one by , )
 
 
 if(!in_array(strtolower($LOOKUP_MINCODE),$AuthCountry)){
