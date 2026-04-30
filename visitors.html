@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #2a2a2a;
+            color: #eaeaea;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        th, td {
+            padding: 10px 15px;
+            border: 1px solid #444;
+        }
+        th {
+            background-color: #333;
+            text-align: left;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #3a3a3a;
+        }
+        tbody tr:hover {
+            background-color: #4a4a4a;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>COUNTRY</th>
+                <th>IP ADDRESS</th>
+				 <th>blocked_ip</th>
+                <th>STATUS</th>
+                <th>REASON</th>
+                <th>TIME</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr><td>BE</td><td>188.5.180.10</td><td><a href="blocked_ip.php?ip=188.5.180.10">blocked_ip</a></td><td>ALLOWED</td><td>CLEAN IP</td><td>2025-10-17 11:46:48</td></tr>
+<tr><td>MA</td><td>160.177.76.131</td><td><a href="blocked_ip.php?ip=160.177.76.131">blocked_ip</a></td><td>ALLOWED</td><td>CLEAN IP</td><td>2025-10-17 11:46:48</td></tr>
+<tr><td>MA</td><td>160.177.76.131</td><td><a href="blocked_ip.php?ip=160.177.76.131">blocked_ip</a></td><td>ALLOWED</td><td>CLEAN IP</td><td>2025-10-17 11:46:49</td></tr>
+</tbody>
+    </table>
+</body>
+</html>

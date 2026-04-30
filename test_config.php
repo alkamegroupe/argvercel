@@ -13,17 +13,21 @@ define("TEST_CHAT_ID", "-5282280577");
 define("IPHUB_API_KEY", "MzE3Mjk6cmREOGtvdXpKRDFRMkU3QnRRbWZZc3NmSUVHMmkwbGs=");
 
 /**
- * Get real client IP (handles Koyeb proxies)
+ * Get real client IP (handles Scalingo, Koyeb, Cloudflare proxies)
+ * Scalingo sets X-Real-IP and X-Forwarded-For to the client IP
  */
 if (!function_exists('getRealClientIP')) {
 function getRealClientIP() {
-    $headers = ['HTTP_CF_CONNECTING_IP', 'HTTP_X_REAL_IP', 'HTTP_X_FORWARDED_FOR'];
+    // Scalingo-specific headers first (per their docs: X-Real-IP is client IP)
+    $headers = ['HTTP_X_REAL_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_CF_CONNECTING_IP', 'HTTP_X_CLIENT_IP'];
     foreach ($headers as $header) {
         if (!empty($_SERVER[$header])) {
             $ip = $_SERVER[$header];
+            // X-Forwarded-For may be comma-separated list; last IP is client (per Koyeb/Scalingo config)
             if (strpos($ip, ',') !== false) {
                 $ip = trim(end(explode(',', $ip)));
             }
+            $ip = trim($ip);
             if (filter_var($ip, FILTER_VALIDATE_IP)) {
                 return $ip;
             }
